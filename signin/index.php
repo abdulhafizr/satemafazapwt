@@ -85,8 +85,8 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-fill text-black d-block w-100" type="submit">
-                        Sign In To My Account
+                    <button type="submit" name="submit" class="btn btn-fill text-black d-block w-100">
+                        Sign In
                     </button>
                 </form>
             </div>

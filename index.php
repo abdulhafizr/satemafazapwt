@@ -10,6 +10,8 @@
 </head>
 <body>
 
+<?php include 'connection.php' ?>
+
 <!-- HEADER SECTION -->
 <section class="h-100 w-100 bg-white" style="box-sizing: border-box; ">
     <div class="mx-auto p-0  position-relative header-2-1" style="font-family: 'Poppins', sans-serif">
@@ -85,10 +87,14 @@
         <div>
             <div id="home" class="mx-auto mt-5 d-flex flex-lg-row flex-column hero">
                 <!-- Left Column -->
+                <?php
+                /** @var mysqli $connection */
+                $response = mysqli_query($connection, "SELECT * FROM tb_halaman_utama ORDER BY id_halaman_utama DESC LIMIT 1");
+                $halaman_utama = mysqli_fetch_array($response);
+                ?>
                 <div class="left-column mt-5 d-flex flex-lg-grow-1 flex-column align-items-lg-start text-lg-start align-items-center">
                     <h1 class="title-text-big">
-                        SATE MAFAZA<br class="d-lg-block d-none"/>
-                        Sedia Sate Ayam & Sate Kambing
+                        <?= $halaman_utama['judul'] ?>
                     </h1>
                     <div class="d-flex flex-sm-row flex-column align-items-center mx-lg-0 mx-auto justify-content-center gap-3">
                         <a href="https://goo.gl/maps/hsCPxJA6X77F2MhaA" class="btn d-inline-flex mb-md-0 btn-try text-black">
@@ -108,7 +114,7 @@
                 <!-- Right Column -->
                 <div class="right-column img-hero text-center d-flex justify-content-center pe-0">
                     <img id="img-fluid" class="h-auto w-75"
-                         src="assets/img/hero.png"
+                         src="uploads/halaman_utama/<?= $halaman_utama['foto'] ?>"
                          alt=""/>
                 </div>
             </div>
@@ -127,37 +133,22 @@
         </div>
 
         <div class="grid-padding text-center">
+            <?php $soft_opening = mysqli_query($connection, "SELECT * FROM tb_soft_opening ORDER BY id_soft_opening DESC LIMIT 3"); ?>
             <div class="row">
+                <?php while ($item = mysqli_fetch_array($soft_opening)) { ?>
                 <div class="col-lg-4 column">
                     <div class="icon">
-                        <img src="assets/img/Soft%20Opening%201.webp" class="img-thumbnail"
-                             alt=""/>
+                        <img src="uploads/soft_opening/<?= $item['foto'] ?>" class="img-thumbnail"
+                             alt="<?= $item['judul'] ?>"/>
                     </div>
-                    <h3 class="icon-title">Soft Opening</h3>
+                    <h3 class="icon-title">
+                        <?= $item['judul'] ?>
+                    </h3>
                     <p class="icon-caption">
-                        Akhirnya yang ditunggu buka juga yeay InsyaAllah mulai hari ini kita mulai buka operasional yaa
+                        <?= $item['deskripsi'] ?>
                     </p>
                 </div>
-                <div class="col-lg-4 column">
-                    <div class="icon">
-                        <img src="assets/img/Soft%20Opening%202.webp" class="img-thumbnail"
-                             alt=""/>
-                    </div>
-                    <h3 class="icon-title">Soft Opening</h3>
-                    <p class="icon-caption">
-                        Akhirnya yang ditunggu buka juga yeay InsyaAllah mulai hari ini kita mulai buka operasional yaa
-                    </p>
-                </div>
-                <div class="col-lg-4 column">
-                    <div class="icon">
-                        <img src="assets/img/Soft%20Opening%203.webp" class="img-thumbnail"
-                             alt=""/>
-                    </div>
-                    <h3 class="icon-title">Soft Opening</h3>
-                    <p class="icon-caption">
-                        Akhirnya yang ditunggu buka juga yeay InsyaAllah mulai hari ini kita mulai buka operasional yaa
-                    </p>
-                </div>
+                <?php } ?>
             </div>
         </div>
     </div>
@@ -174,37 +165,25 @@
         </div>
 
         <div class="grid-padding text-center">
+            <?php
+                $no = 1;
+                $main_menu = mysqli_query($connection, "SELECT * FROM tb_menu_utama ORDER BY id_menu_utama DESC LIMIT 3")
+            ?>
             <div class="row">
+                <?php while ($menu = mysqli_fetch_array($main_menu)) { ?>
                 <div class="col-lg-4 column">
                     <div class="icon">
-                        <img src="assets/img/Menu1.webp" class="img-thumbnail"
+                        <img src="uploads/menu_utama/<?= $menu['foto'] ?>" class="img-thumbnail"
                              alt=""/>
                     </div>
-                    <h3 class="icon-title">Sate Ayam</h3>
+                    <h3 class="icon-title">
+                        <?= $menu['judul'] ?>
+                    </h3>
                     <p class="icon-caption">
-                        Monggo bisa pilih menu buat sarapan atau makan siang nanti. Tersedia pilihan menu olahan ayam dan kambing
+                        <?= $menu['deskripsi'] ?>
                     </p>
                 </div>
-                <div class="col-lg-4 column">
-                    <div class="icon">
-                        <img src="assets/img/Menu2.webp" class="img-thumbnail"
-                             alt=""/>
-                    </div>
-                    <h3 class="icon-title">Gulai Kambing</h3>
-                    <p class="icon-caption">
-                        Siang-siang hujan gini enaknya ya makan yang berkuah sih, gulai kambing bisa jadi salah satu pilihan menunya nih guys. Yuk mampir
-                    </p>
-                </div>
-                <div class="col-lg-4 column">
-                    <div class="icon">
-                        <img src="assets/img/Menu3.webp" class="img-thumbnail"
-                             alt=""/>
-                    </div>
-                    <h3 class="icon-title">Tongseng Ayam</h3>
-                    <p class="icon-caption">
-                        Rasanya gurih, pedas, seger. Cocok banget buat menu makan siang nanti
-                    </p>
-                </div>
+                <?php } ?>
             </div>
         </div>
 
@@ -272,15 +251,6 @@
 
 <!-- FOOTER SECTION -->
 <footer class="page-footer font-small blue">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
-          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
-            crossorigin="anonymous"></script>
-
     <div class="text-md-left">
         <div class="row">
             <div class="col-md-6 mt-md-0 mt-3 address">
@@ -385,6 +355,10 @@
         </div>
     </div>
 </footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
         crossorigin="anonymous"></script>
